@@ -3,7 +3,7 @@
 * <a href="#install_django">Install Django</a>
 * <a href="#creating_a_project">Creating a project</a>
 * <a href="#creating_an_app">Creating an app</a>
-
+* <a href="#write_your_first_view">Write your first view</a>
 
 <div id="install_django">
 
@@ -78,7 +78,7 @@ These files are:
 * The inner **mysite/** directory is the actual Python package for your project. Its name is the Python package name you'll need to use to import anything inside it (e.g. mysite.urls).
 * **mysite/__init__.py**: An empty file that tells Python that this directory should be considered a Python package. If you're a Python beginner, read more about packages in the official Python docs.
 * **mysite/settings.py**: Settings/configuration for this Django project. Django settings will tell you all about how settings work.
-* **mysite/urls.py**: The URL declarations for this Django project; a “table of contents” of your Django-powered site. You can read more about URLs in URL dispatcher.
+* **mysite/urls.py**: The URL declarations for this Django project; a "table of contents" of your Django-powered site. You can read more about URLs in URL dispatcher.
 * **mysite/wsgi.py**: An entry-point for WSGI-compatible web servers to serve your project. See How to deploy with WSGI for more details.
 
 
@@ -134,6 +134,98 @@ An app is a Web application that does something – e.g., a Weblog system, a dat
 
 For example, `http://localhost:8080/contacts` may refer to an addressbook application.
 
+Your apps can live anywhere on your Python path. In this tutorial, we'll create our contacts app right next to the manage.py file so that it can be imported as its own top-level module, rather than a submodule of mysite.
 
+To create your app, make sure you're in the same directory as manage.py and type this command:
+
+```unix
+python3 manage.py startapp contacts
+```
+
+This results in the following folder structure, which houses our **contacts** app:
+
+```
+contacts
+├── __init__.py
+├── admin.py
+├── apps.py
+├── migrations
+│   └── __init__.py
+├── models.py
+├── tests.py
+└── views.py
+```
+</div>
+
+<div id="write_your_first_view">
+
+### Write your first view
+
+Open the `contacts/views.py`, which is currently empty and add the following piece of code: 
+
+```python
+from django.http import HttpResponse
+
+
+def index(request):
+    return HttpResponse("Hi there! You are on the <b>contacts</b> homepage")
+```
+
+To call the view, we need to map it to a URL - and for this we need a URLconf.
+
+To create a URLconf in the `contacts` directory, create a file called `urls.py` and add the following code in it:
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+```
+
+Your app directory should now look like:
+
+
+```
+contacts
+├── __init__.py
+├── __pycache__
+│   ├── __init__.cpython-36.pyc
+│   ├── urls.cpython-36.pyc
+│   └── views.cpython-36.pyc
+├── admin.py
+├── apps.py
+├── migrations
+│   └── __init__.py
+├── models.py
+├── tests.py
+├── urls.py
+└── views.py
+```
+
+The next step is to point the root URLconf at the contacts.urls module. In mysite/urls.py, add an import for django.urls.include and insert an include() in the urlpatterns list, so you have:
+
+```python
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path('contacts/', include('contacts.urls')),
+    path('admin/', admin.site.urls),
+]
+```
+
+The **include()** function allows referencing other URLconfs. Whenever Django encounters **include()**, it chops off whatever part of the URL matched up to that point and sends the remaining string to the included URLconf for further processing.
+
+The idea behind **include()** is to make it easy to plug-and-play URLs. Since contacts are in their own URLconf (contacts/urls.py), they can be placed under "/contacts/", or under "/fun_contacts/", or under "/content/contacts/", or any other path root, and the app will still work.
+
+You should always use include() when you include other URL patterns. **admin.site.urls** is the only exception to this.
+
+At this point, if your server is still running, stop the same by pressing CONTROL+C and start it again using the command:
+
+```unix
+python manage.py runserver
+```
 
 </div>
