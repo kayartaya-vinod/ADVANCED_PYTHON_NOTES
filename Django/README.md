@@ -103,6 +103,9 @@ Starting development server at http://127.0.0.1:8000/
 Quit the server with CONTROL-C.
 ```
 
+Open the browser and visit `http://localhost:8080` and you should see the following screen:
+
+![](img/p1.png)
 
 </div>
 
