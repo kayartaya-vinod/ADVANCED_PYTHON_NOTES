@@ -69,9 +69,6 @@ mysite/
     └── wsgi.py
 ```
 
-As you would have guessed, `mysite` is the name of the project.
-
-
 These files are:
 
 * The outer mysite/ root directory is just a container for your project. Its name doesn’t matter to Django; you can rename it to anything you like.
@@ -81,6 +78,31 @@ These files are:
 * **mysite/settings.py**: Settings/configuration for this Django project. Django settings will tell you all about how settings work.
 * **mysite/urls.py**: The URL declarations for this Django project; a “table of contents” of your Django-powered site. You can read more about URLs in URL dispatcher.
 * **mysite/wsgi.py**: An entry-point for WSGI-compatible web servers to serve your project. See How to deploy with WSGI for more details.
+
+
+Django ships with a development server. Use the `cd` command to change the directory to the outer **mysite** directory and issue the following command:
+
+```unix
+python manage.py runserver
+```
+
+Here is the typicall output:
+
+```unix
+don $ python3 manage.py runserver
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 15 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+
+November 12, 2018 - 14:53:05
+Django version 2.1, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+```
+
 
 </div>
 
